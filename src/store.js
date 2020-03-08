@@ -2,6 +2,7 @@ import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
 import "firebase/database";
+import "firebase/storage";
 import { createStore, combineReducers, compose } from "redux";
 import { firebaseReducer } from "react-redux-firebase";
 import { createFirestoreInstance, firestoreReducer } from "redux-firestore";
@@ -30,7 +31,19 @@ const rrfConfig = {
   //     displayName: ""
   //   };
   // },
-  enableClaims: true // Get custom claims along with the profile
+  enableClaims: true, // Get custom claims along with the profile
+  fileMetadataFactory: (uploadRes, firebase, metadata, downloadURL) => {
+    // upload response from Firebase's storage upload
+    const {
+      metadata: { name, fullPath }
+    } = uploadRes;
+    // default factory includes name, fullPath, downloadURL
+    return {
+      name,
+      fullPath,
+      downloadURL
+    };
+  }
 };
 
 // Initialize firebase instance
@@ -39,6 +52,7 @@ firebase.initializeApp(fbConfig);
 // Initialize other services on firebase instance
 firebase.firestore();
 firebase.database();
+firebase.storage();
 
 // Add firebase to reducers
 const rootReducer = combineReducers({

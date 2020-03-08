@@ -9,6 +9,7 @@ import PrivateRoute from "../tools/privateRoute";
 import "../style.css";
 import Login from "./login";
 import Signup from "./signup";
+import { CardActions, CardHeader, Avatar } from "@material-ui/core";
 
 // Setup react-redux so that connect HOC can be used
 export default function Pages() {
@@ -17,11 +18,11 @@ export default function Pages() {
       <AuthIsLoaded>
         <Navbar />
 
-        <Home />
         <div>
           <Switch>
-            {/* <Route exact path="/"> */}
-            {/* </Route> */}
+            {/* <Route exact path="/">
+              <Home />
+            </Route>
             <Route exact path="/login">
               <Login />
             </Route>
@@ -30,7 +31,10 @@ export default function Pages() {
             </Route>
             <PrivateRoute exact path="/protected">
               <div>Protected content</div>
-            </PrivateRoute>
+            </PrivateRoute> */}
+            <Route exact path="/" component={Home} />
+            <PrivateRoute exact path="/login" component={Login} />
+            <PrivateRoute exact path="/signup" component={Signup} />
           </Switch>
         </div>
       </AuthIsLoaded>

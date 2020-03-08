@@ -4,18 +4,44 @@ import {
   Paper,
   TextField,
   Typography,
-  Button
+  Button,
+  makeStyles
 } from "@material-ui/core";
 import { Form, Field, Formik } from "formik";
 import { object, string } from "yup";
 import { Link } from "react-router-dom";
 import { useFirebase } from "react-redux-firebase";
+import { useSelector } from "react-redux";
+
+const useStyles = makeStyles(theme => ({
+  formWrapper: {
+    backgroundColor: "#fff"
+  },
+  fomrPaper: {
+    padding: "15px 30px",
+    width: "95%",
+    margin: "auto",
+    [theme.breakpoints.up("xs")]: {
+      width: "80%"
+    },
+    [theme.breakpoints.up("sm")]: {
+      width: "50%"
+    },
+    [theme.breakpoints.up("md")]: {
+      width: "35%"
+    }
+  },
+  formMain: {
+    width: "95%"
+  }
+}));
 
 const SignUp = () => {
   const firebase = useFirebase();
+  const classes = useStyles();
   return (
-    <Backdrop open>
-      <Paper variant="elevation" elevation={6} style={{ padding: "10px 20px" }}>
+    <Backdrop open className={classes.formWrapper}>
+      <Paper variant="elevation" elevation={6} className={classes.fomrPaper}>
         <Formik
           initialValues={{
             userName: "",
@@ -32,17 +58,15 @@ const SignUp = () => {
               .required("Password is require")
           })}
           onSubmit={(values, { resetForm, setErrors, setSubmitting }) => {
-            console.log(values);
             firebase.createUser(
               { email: values.email, password: values.password },
               { username: values.userName, email: values.email }
             );
             resetForm();
-            window.history.push("/");
           }}
         >
           {({ errors, touched, isSubmiitting }) => (
-            <Form action="" style={{ width: "500px" }}>
+            <Form action="" className={classes.formMain}>
               <Typography variant="h4" color="textSecondary" align="center">
                 SignUp
               </Typography>

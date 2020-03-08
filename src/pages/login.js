@@ -4,18 +4,45 @@ import {
   Paper,
   TextField,
   Typography,
-  Button
+  Button,
+  makeStyles
 } from "@material-ui/core";
 import { withFormik, Form, Field, Formik } from "formik";
 import { object, string } from "yup";
 import { Link } from "react-router-dom";
 import { useFirebase } from "react-redux-firebase";
+import { useSelector } from "react-redux";
+
+const useStyles = makeStyles(theme => ({
+  formWrapper: {
+    backgroundColor: "#fff"
+  },
+  fomrPaper: {
+    padding: "15px 30px",
+    width: "95%",
+    margin: "auto",
+    [theme.breakpoints.up("xs")]: {
+      width: "80%"
+    },
+    [theme.breakpoints.up("sm")]: {
+      width: "50%"
+    },
+    [theme.breakpoints.up("md")]: {
+      width: "35%"
+    }
+  },
+  formMain: {
+    width: "95%"
+  }
+}));
 
 const Login = () => {
   const firebase = useFirebase();
+  const classes = useStyles();
+
   return (
-    <Backdrop open>
-      <Paper variant="elevation" elevation={6} style={{ padding: "10px 20px" }}>
+    <Backdrop open className={classes.formWrapper}>
+      <Paper variant="elevation" elevation={6} className={classes.fomrPaper}>
         <Formik
           initialValues={{
             email: "",
@@ -33,11 +60,10 @@ const Login = () => {
             console.log(values);
             firebase.login({ email: values.email, password: values.password });
             resetForm();
-            window.history.push("/");
           }}
         >
           {({ errors, touched, isSubmiitting }) => (
-            <Form action="" style={{ width: "500px" }}>
+            <Form action="" className={classes.formMain}>
               <Typography variant="h4" color="textSecondary" align="center">
                 Login
               </Typography>
@@ -47,6 +73,7 @@ const Login = () => {
                 name="email"
                 variant="outlined"
                 margin="normal"
+                label="Email"
                 helperText={touched.email && errors.email && errors.email}
                 error={touched.email && errors.email ? true : false}
                 fullWidth
@@ -60,6 +87,7 @@ const Login = () => {
                 error={touched.password && errors.password ? true : false}
                 name="password"
                 variant="outlined"
+                label="Password"
                 margin="normal"
                 fullWidth
               />
